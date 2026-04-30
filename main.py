@@ -16,18 +16,16 @@ MY_PASS = os.getenv("MY_PASS")
 TARGET_URL = "http://51.210.208.26/ints/client/SMSCDRStats"
 LOGIN_URL = "http://51.210.208.26/ints/login"
 
-# ✅ Firebase URL (FROM FIRST SCRIPT)
 FB_URL = "https://family-adc9d-default-rtdb.firebaseio.com/bot"
 
 ADMIN_LINK = "https://t.me/jisansheikh"
 BOT_LINK = "https://t.me/Paradox_Number_Bot"
 DV_LINK = "https://t.me/jisansheikh"
-CN_LINK = "https://t.me/The_Paradox_Tips"
+CN_LINK = "https://t.me/The_Peradox_Tips"
 
 sent_msgs = {}
 START_TIME = time.time()
 
-# ===== FIREBASE FUNCTION (ADDED) =====
 def update_firebase(num, msg, date_str):
     try:
         url = f"{FB_URL}/sms_logs/{num}.json"
@@ -41,7 +39,6 @@ def update_firebase(num, msg, date_str):
     except:
         pass
 
-# ===== UTILITIES =====
 def extract_otp(msg):
     match = re.search(r'\b(\d{3,8}|\d{3}-\d{3}|\d{4}\s\d{4})\b', msg)
     return match.group(0) if match else "N/A"
@@ -82,7 +79,6 @@ def send_telegram(date_str, num, sms_text, otp, cli_source, is_update=False):
     except:
         return False
 
-# ===== MAIN BOT =====
 async def start_bot():
     print("🚀 Bot started...")
 
@@ -122,12 +118,17 @@ async def start_bot():
                         passField.dispatchEvent(new Event('input', {{ bubbles: true }}));
                         ansField.dispatchEvent(new Event('input', {{ bubbles: true }}));
 
+                        // ✅ FIX: Also match "Sign in" button
                         for (let b of document.querySelectorAll('button, input[type="submit"]')) {{
-                            if ((b.innerText || b.value || "").toLowerCase().includes('login')) {{
+                            let btnText = (b.innerText || b.value || "").toLowerCase();
+                            if (btnText.includes('login') || btnText.includes('sign in') || btnText.includes('signin')) {{
                                 b.click();
                                 return true;
                             }}
                         }}
+                        // Fallback: click first submit button
+                        let fallback = document.querySelector('button[type="submit"], input[type="submit"]');
+                        if (fallback) fallback.click();
                     }}
                 }}""")
                 return True
@@ -151,11 +152,11 @@ async def start_bot():
 
                 for row in rows:
                     cols = await row.query_selector_all("td")
-                    if len(cols) >= 7:
-                        d = (await cols[0].inner_text()).strip()
-                        n = (await cols[2].inner_text()).strip()
-                        s = (await cols[4].inner_text()).strip()
-                        cli = (await cols[3].inner_text()).strip()
+                    if len(cols) >= 6:
+                        d = (await cols[0].inner_text()).strip()   # Date
+                        n = (await cols[2].inner_text()).strip()   # Number
+                        s = (await cols[4].inner_text()).strip()   # SMS (unchanged)
+                        cli = (await cols[3].inner_text()).strip() # CLI
 
                         if d and len(re.sub(r'\D', '', n)) >= 8:
                             valid_rows.append({
