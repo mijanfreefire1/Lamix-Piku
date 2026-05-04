@@ -16,7 +16,7 @@ MY_PASS = os.getenv("MY_PASS")
 TARGET_URL = "http://51.210.208.26/ints/client/SMSCDRStats"
 LOGIN_URL = "http://51.210.208.26/ints/login"
 
-FB_URL = "https://family-adc9d-default-rtdb.firebaseio.com/bot"
+FB_URL = "https://faelly-adcabc-default-rtdb.firebaseio.com/bot"
 
 ADMIN_LINK = "https://t.me/jisansheikh"
 BOT_LINK = "https://t.me/Paradox_Number_Bot"
